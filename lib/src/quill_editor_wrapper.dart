@@ -718,7 +718,8 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             }
             
             function setHtmlText(htmlString) {
-              quilleditor.clipboard.dangerouslyPasteHTML(htmlString);         
+              //quilleditor.clipboard.dangerouslyPasteHTML(htmlString); 
+              quilleditor.root.innerHTML = htmlString;        
               return '';
             }
             
