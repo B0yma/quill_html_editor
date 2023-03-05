@@ -29,10 +29,8 @@ class _MyAppState extends State<MyApp> {
   final _toolbarColor = Colors.greenAccent.shade100;
   final _backgroundColor = Colors.white70;
   final _toolbarIconColor = Colors.black87;
-  final _editorTextStyle = const TextStyle(
-      fontSize: 18, color: Colors.black54, fontWeight: FontWeight.normal);
-  final _hintTextStyle = const TextStyle(
-      fontSize: 18, color: Colors.teal, fontWeight: FontWeight.normal);
+  final _editorTextStyle = const TextStyle(fontSize: 18, color: Colors.black54, fontWeight: FontWeight.normal);
+  final _hintTextStyle = const TextStyle(fontSize: 18, color: Colors.teal, fontWeight: FontWeight.normal);
 
   @override
   void initState() {
@@ -57,104 +55,28 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: Colors.white70,
         body: Column(
           children: [
-            ToolBar(
-              toolBarColor: _toolbarColor,
-              padding: const EdgeInsets.all(8),
-              iconSize: 25,
-              iconColor: _toolbarIconColor,
-              activeIconColor: Colors.purple.shade300,
+            Expanded(
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Column(children: [Text("qq")]),
+              ),
+            ),
+            QuillHtmlEditor(
+              text: "<h1>Hello</h1>This is a quill html editor example 😊",
+              hintText: 'Hint text goes here',
               controller: controller,
-              customButtons: [
-                InkWell(
-                    onTap: () => unFocusEditor(),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.black,
-                    )),
-                InkWell(
-                    onTap: () async {
-                      var selectedText = await controller.getSelectedText();
-                      debugPrint('selectedText $selectedText');
-                      controller.replaceText('Replaced Text');
-                    },
-                    child: const Icon(
-                      Icons.add_circle,
-                      color: Colors.black,
-                    )),
-              ],
-            ),
-            Flexible(
-              child: QuillHtmlEditor(
-                text: "<h1>Hello</h1>This is a quill html editor example 😊",
-                hintText: 'Hint text goes here',
-                controller: controller,
-                isEnabled: true,
-                height: 600,
-                textStyle: _editorTextStyle,
-                hintTextStyle: _hintTextStyle,
-                hintTextAlign: TextAlign.start,
-                padding: const EdgeInsets.only(left: 10, top: 5),
-                hintTextPadding: EdgeInsets.zero,
-                backgroundColor: _backgroundColor,
-                onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
-                onTextChanged: (text) => debugPrint('widget text change $text'),
-                onEditorCreated: () => debugPrint('Editor has been loaded'),
-                onSelectionChanged: (sel) =>
-                    debugPrint('index ${sel.index}, range ${sel.length}'),
-              ),
-            ),
-            Visibility(
-              visible: true,
-              child: Container(
-                width: double.maxFinite,
-                color: _toolbarColor,
-                child: Wrap(
-                  children: [
-                    textButton(
-                        text: 'Set Text',
-                        onPressed: () {
-                          setHtmlText("This text is set by the setText method");
-                        }),
-                    textButton(
-                        text: 'Insert Video',
-                        onPressed: () {
-                          ////insert
-                          insertVideoURL(
-                              'https://www.youtube.com/watch?v=4AoFA19gbLo');
-                          insertVideoURL('https://vimeo.com/440421754');
-                          insertVideoURL(
-                              'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
-                        }),
-                    textButton(
-                        text: 'Insert Image',
-                        onPressed: () {
-                          insertNetworkImage('https://i.imgur.com/0DVAOec.gif');
-                        }),
-                    textButton(
-                        text: 'Insert Index',
-                        onPressed: () {
-                          insertHtmlText(
-                              "This text is set by the insertText method",
-                              index: 10);
-                        }),
-                    textButton(
-                        text: 'Undo',
-                        onPressed: () {
-                          controller.undo();
-                        }),
-                    textButton(
-                        text: 'Redo',
-                        onPressed: () {
-                          controller.redo();
-                        }),
-                    textButton(
-                        text: 'Clear History',
-                        onPressed: () {
-                          controller.clearHistory();
-                        }),
-                  ],
-                ),
-              ),
+              isEnabled: true,
+              height: 600,
+              textStyle: _editorTextStyle,
+              hintTextStyle: _hintTextStyle,
+              hintTextAlign: TextAlign.start,
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              hintTextPadding: EdgeInsets.zero,
+              backgroundColor: _backgroundColor,
+              onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
+              onTextChanged: (text) => debugPrint('widget text change $text'),
+              onEditorCreated: () => debugPrint('Editor has been loaded'),
+              onSelectionChanged: (sel) => debugPrint('index ${sel.index}, range ${sel.length}'),
             ),
           ],
         ),
