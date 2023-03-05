@@ -134,22 +134,15 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       double screenHeight = widget.height;
-      _initialContent =
-          _getQuillPage(height: screenHeight, width: constraints.maxWidth);
+      _initialContent = _getQuillPage(height: screenHeight, width: constraints.maxWidth);
 
       return Center(
-        child: _buildEditorView(
-            context: context,
-            height: screenHeight,
-            width: constraints.maxWidth),
+        child: _buildEditorView(context: context, height: screenHeight, width: constraints.maxWidth),
       );
     });
   }
 
-  Widget _buildEditorView(
-      {required BuildContext context,
-      required double height,
-      required double width}) {
+  Widget _buildEditorView({required BuildContext context, required double height, required double width}) {
     _initialContent = _getQuillPage(height: height, width: width);
 
     return WebViewX(
@@ -175,8 +168,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
             callBack: (map) {
               try {
                 if (widget.controller._toolBarKey != null) {
-                  widget.controller._toolBarKey!.currentState
-                      ?.updateToolBarFormat(jsonDecode(map));
+                  widget.controller._toolBarKey!.currentState?.updateToolBarFormat(jsonDecode(map));
                 }
               } catch (e) {
                 if (!kReleaseMode) {
@@ -190,8 +182,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
               try {
                 if (widget.controller._changeController != null) {
                   String finalText = "";
-                  String parsedText =
-                      QuillEditorController._stripHtmlIfNeeded(map);
+                  String parsedText = QuillEditorController._stripHtmlIfNeeded(map);
                   if (parsedText.trim() == "") {
                     finalText = "";
                   } else {
@@ -263,8 +254,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
 
   /// a private method to check if editor has focus
   Future<dynamic> _setSelectionRange(int index, int length) async {
-    return await _webviewController
-        .callJsMethod("setSelection", [index, length]);
+    return await _webviewController.callJsMethod("setSelection", [index, length]);
   }
 
   /// a private method to set the Html text to the editor
@@ -289,8 +279,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
 
   /// a private method to insert the Html text to the editor
   Future _insertHtmlTextToEditor({required String htmlText, int? index}) async {
-    return await _webviewController
-        .callJsMethod("insertHtmlText", [htmlText, index]);
+    return await _webviewController.callJsMethod("insertHtmlText", [htmlText, index]);
   }
 
   /// a private method to embed the video to the editor
@@ -311,8 +300,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
   /// a private method to enable/disable the editor
   Future _setFormat({required String format, required dynamic value}) async {
     try {
-      return await _webviewController
-          .callJsMethod("setFormat", [format, value]);
+      return await _webviewController.callJsMethod("setFormat", [format, value]);
     } catch (e) {
       _printWrapper(false, e.toString());
     }
@@ -325,16 +313,14 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
 
   /// a private method to add remove or delete table in the editor
   Future _modifyTable(EditTableEnum type) async {
-    return await _webviewController
-        .callJsMethod("modifyTable", [describeEnum(type)]);
+    return await _webviewController.callJsMethod("modifyTable", [describeEnum(type)]);
   }
 
   /// a private method to replace selection text in the editor
   Future _replaceText(
     String replaceText,
   ) async {
-    return await _webviewController
-        .callJsMethod("replaceSelection", [replaceText]);
+    return await _webviewController.callJsMethod("replaceSelection", [replaceText]);
   }
 
   /// a private method to get the selected text from editor
@@ -893,8 +879,7 @@ class QuillEditorController {
   /// [setDelta] method is used to set the html text to the editor
   /// it will override the existing text in the editor with the new one
   Future setDelta(String text) async {
-    return await _editorKey?.currentState
-        ?._setDeltaToEditor(deltaMap: jsonDecode(text));
+    return await _editorKey?.currentState?._setDeltaToEditor(deltaMap: jsonDecode(text));
   }
 
   /// [focus] method is used to request focus of the editor
@@ -904,8 +889,7 @@ class QuillEditorController {
 
   /// [insertTable] method is used to insert table by row and column to the editor
   Future insertTable(int row, int column) async {
-    return await _editorKey?.currentState
-        ?._insertTableToEditor(row: row, column: column);
+    return await _editorKey?.currentState?._insertTableToEditor(row: row, column: column);
   }
 
   /// [modifyTable] method is used to add or remove, rows or columns of the table
@@ -916,8 +900,7 @@ class QuillEditorController {
   /// [insertText] method is used to insert the html text to the editor
   /// if the index is not passed, it will insert the text at cursor position
   Future insertText(String text, {int? index}) async {
-    return await _editorKey?.currentState
-        ?._insertHtmlTextToEditor(htmlText: text, index: index);
+    return await _editorKey?.currentState?._insertHtmlTextToEditor(htmlText: text, index: index);
   }
 
   /// [replaceText] method is used to replace the selected text in the editor
@@ -962,9 +945,7 @@ class QuillEditorController {
   /// [getSelectionRange] to get the text selection range from editor
   Future<SelectionModel> getSelectionRange() async {
     var selection = await _editorKey?.currentState?._getSelectionRange();
-    return selection != null
-        ? SelectionModel.fromJson(jsonDecode(selection))
-        : SelectionModel(index: 0, length: 0);
+    return selection != null ? SelectionModel.fromJson(jsonDecode(selection)) : SelectionModel(index: 0, length: 0);
   }
 
   /// [setSelectionRange] to select the text in the editor by index
@@ -995,8 +976,7 @@ class QuillEditorController {
   ///[onTextChanged] method is used to listen to editor text changes
   void onTextChanged(Function(String) data) {
     try {
-      if (_changeController != null &&
-          _changeController?.hasListener == false) {
+      if (_changeController != null && _changeController?.hasListener == false) {
         _changeController?.stream.listen((event) {
           data(event);
         });
