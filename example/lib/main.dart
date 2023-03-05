@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               hintText: 'Hint text goes here',
               controller: controller,
               isEnabled: true,
-              height: 600,
+              height: 222,
               textStyle: _editorTextStyle,
               hintTextStyle: _hintTextStyle,
               hintTextAlign: TextAlign.start,

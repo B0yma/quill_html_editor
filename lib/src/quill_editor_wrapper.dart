@@ -117,10 +117,12 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
   /// [isEnabled] as the name suggests, is used to enable or disable the editor
   /// When it is set to false, the user cannot edit or type in the editor
   bool isEnabled = true;
+  late double _currentHeight;
 
   @override
   void initState() {
     isEnabled = widget.isEnabled;
+    _currentHeight = widget.height;
     super.initState();
   }
 
@@ -133,23 +135,22 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      double screenHeight = widget.height;
-      _initialContent = _getQuillPage(height: screenHeight, width: constraints.maxWidth);
+      _initialContent = _getQuillPage(width: constraints.maxWidth);
 
       return Center(
-        child: _buildEditorView(context: context, height: screenHeight, width: constraints.maxWidth),
+        child: _buildEditorView(context: context, width: constraints.maxWidth),
       );
     });
   }
 
-  Widget _buildEditorView({required BuildContext context, required double height, required double width}) {
-    _initialContent = _getQuillPage(height: height, width: width);
+  Widget _buildEditorView({required BuildContext context, required double width}) {
+    _initialContent = _getQuillPage(width: width);
 
     return WebViewX(
       key: ValueKey(widget.key.hashCode.toString()),
       initialContent: _initialContent,
       initialSourceType: SourceType.html,
-      height: height,
+      height: _currentHeight,
       ignoreAllGestures: false,
       width: width,
       onWebViewCreated: (controller) => _webviewController = controller,
@@ -163,6 +164,14 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
         });
       },
       dartCallBacks: {
+        DartCallback(
+            name: 'WebResizeCallback',
+            callBack: (map) {
+              print('WebResizeCallback:' + map.toString());
+              setState(() {
+                _currentHeight = double.tryParse(map.toString()) ?? 0;
+              });
+            }),
         DartCallback(
             name: 'UpdateFormat',
             callBack: (map) {
@@ -345,7 +354,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
 
   /// This method generated the html code that is required to render the quill js editor
   /// We are rendering this html page with the help of webviewx and using the callbacks to call the quill js apis
-  String _getQuillPage({required double height, required double width}) {
+  String _getQuillPage({required double width}) {
     return '''
    <!DOCTYPE html>
         <html>
@@ -354,6 +363,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.4/quill.snow.min.css" />
           <!-- Include the Quill library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.4/quill.min.js"></script>
+
         <style>
         body{
            margin:0px !important;
@@ -390,7 +400,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
           padding-right:${widget.padding?.right ?? '0'}px;
           padding-top:${widget.padding?.top ?? '0'}px;
           padding-bottom:${widget.padding?.bottom ?? '0'}px;
-          height: ${height.toInt()}px;
+         
           min-height:100%;
           contenteditable=true !important;
         }
@@ -411,14 +421,21 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
    
         </head>
         <body>
-        
+                <script>
+  const resizeObserver = new ResizeObserver(entries =>{
+  console.log("Offset height has changed:", (entries[0].target.clientHeight).toString())
+  //Resize.postMessage("height" + (entries[0].target.clientHeight).toString())
+  WebResizeCallback.postMessage((entries[0].target.clientHeight).toString());
+  })
+  resizeObserver.observe(document.body)
+</script>
         <!-- Create the toolbar container -->
         <div id="toolbar-container"></div>
         
         <!-- Create the editor container -->
         <div style="position:relative;margin-top:0em;">
-        <div id="editorcontainer" style="height:${height.toInt()}px; min-height:100%; overflow-y:auto;margin-top:0em;">
-        <div id="editor" style="min-height:100%; height:${height.toInt()}px;  width:100%;"></div>
+        <div id="editorcontainer" style= min-height:0%; overflow-y:auto;margin-top:0em;">
+        <div id="editor" style="min-height:0%; width:100%;"></div>
         </div>
         </div>
       
