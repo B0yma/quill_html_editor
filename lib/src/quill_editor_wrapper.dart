@@ -137,9 +137,7 @@ class QuillHtmlEditorState extends State<QuillHtmlEditor> {
     return LayoutBuilder(builder: (context, constraints) {
       _initialContent = _getQuillPage(width: constraints.maxWidth);
 
-      return Center(
-        child: _buildEditorView(context: context, width: constraints.maxWidth),
-      );
+      return _buildEditorView(context: context, width: constraints.maxWidth);
     });
   }
 
