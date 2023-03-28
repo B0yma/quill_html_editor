@@ -11,6 +11,9 @@ Quill Html Editor is a HTML rich text editor for Android, iOS, and Web, it is bu
 - We can also add custom buttons to the toolbar
 - Supports Embedding Images, Videos, Inserting Tables
 
+## Quill Html Editor Demo
+Please go to [Demo Page](https://the-airbender.github.io/) to try out the Quill Editor on Web
+
 
 ## Screenshots
 
@@ -39,10 +42,6 @@ width="600" alt="1" src="https://i.imgur.com/3PrFsZU.png">
 </div> </p>
 
 
-## Quill Html Editor Demo
-Please go to [Demo Page](https://the-airbender.github.io/) to try out the Quill Editor on Web
-
-
 ## Documentation
 See the API documentation for details on the following topics:
 
@@ -61,12 +60,11 @@ Define a **QuillEditorController** to access the editor methods, pass the contro
 ```
 ```dart
      QuillHtmlEditor(
-        text:
-        "<h1>Hello</h1>This is a quill html editor example 😊",
+        text: "<h1>Hello</h1>This is a quill html editor example 😊",
         hintText: 'Hint text goes here',
         controller: controller,
         isEnabled: true,
-        height: MediaQuery.of(context).size.height,
+        minHeight: 300,
         textStyle: _editorTextStyle,
         hintTextStyle: _hintTextStyle,
         hintTextAlign: TextAlign.start,
@@ -75,54 +73,59 @@ Define a **QuillEditorController** to access the editor methods, pass the contro
         backgroundColor: _backgroundColor,
         onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
         onTextChanged: (text) => debugPrint('widget text change $text'),
-    ),
+        onEditorCreated: () => debugPrint('Editor has been loaded'),
+        onEditorResized: (height) =>
+        debugPrint('Editor resized $height'),
+        onSelectionChanged: (sel) =>
+        debugPrint('${sel.index},${sel.length}')
+      ),
 ```
 
 Define **ToolBar** widget and pass the same **controller** created for **QuillHtmlEditor**
 ```dart
    ToolBar(
-	toolBarColor: Colors.cyan.shade50,
-	activeIconColor: Colors.green,
-	padding: const EdgeInsets.all(8),
-	iconSize: 20,
-	controller: controller,
-	customButtons: [
-		InkWell(onTap: () {}, child: const Icon(Icons.favorite)),
-		InkWell(onTap: () {}, child: const Icon(Icons.add_circle)),
-	],
-   )
+        toolBarColor: Colors.cyan.shade50,
+        activeIconColor: Colors.green,
+        padding: const EdgeInsets.all(8),
+        iconSize: 20,
+        controller: controller,
+        customButtons: [
+        InkWell(onTap: () {}, child: const Icon(Icons.favorite)),
+        InkWell(onTap: () {}, child: const Icon(Icons.add_circle)),
+  ],
+)
 ```
 **Note**: *toolBarConfig*, if not passed to **ToolBar**, it will show all the Toolbar Buttons. To show only required buttons, please specify the types in the list as show below.
 ```dart
-    final customToolBarList = [	
-        ToolBarStyle.bold,
-        ToolBarStyle.italic,
-        ToolBarStyle.align,
-        ToolBarStyle.color,
-	];
-	
-   ToolBar(
-   	controller: controller,
-   	toolBarConfig: customToolBarList
-   ),
+    final customToolBarList = [
+      ToolBarStyle.bold,
+      ToolBarStyle.italic,
+      ToolBarStyle.align,
+      ToolBarStyle.color,
+    ];
+
+    ToolBar(
+     controller: controller,
+     toolBarConfig: customToolBarList
+    ),
 ```
 
 We can also add custom buttons to our **ToolBar** as shown below
 ```dart
     final customButtons =  [
-          InkWell(onTap: () {}, child: const Icon(Icons.favorite)),
-          InkWell(onTap: () {}, child: const Icon(Icons.add_circle)),
-    ];
+     InkWell(onTap: () {}, child: const Icon(Icons.favorite)),
+     InkWell(onTap: () {}, child: const Icon(Icons.add_circle)),
+     ];
 
     ToolBar(
-      controller: controller,
-      customButtons:customButtons
+     controller: controller,
+     customButtons:customButtons
     ),
 ```
 
 ##### To get the html string from editor
 ```dart
-String? htmlText = await controller.getText();
+  String? htmlText = await controller.getText();
 ```
 ##### To set the html string to editor
 ```dart
@@ -135,7 +138,7 @@ String? htmlText = await controller.getText();
 ```
 ##### To clear the editor
 ```dart
- controller.clear();
+  controller.clear();
 ```
 
 ##### To enable editor
@@ -148,28 +151,20 @@ String? htmlText = await controller.getText();
   controller.enableEditor(false);
 ```
 
-## Todo
+### Todo
 
 -  **CustomStyleButton** - Let the user add own icons to toolbar styles
 -  **Custom Color** - Let the user add more Colors to the Color Picker
 -  **Custom FontSize** - Let the user add custom font sizes, instead of just Small, Normal, Large & Huge
 -  **AsyncImagePickerButton** -  To share picked file to user, to upload it asynchronously and inserts the returned link into the editor
 -  **Custom FontStyles** -  Let the user choose the supported font styles of the editor
-- **Editor History** - Provides option to undo or redo text
-- More examples for each available apis
-
-
-### Credits
-[adrianflutur](https://github.com/adrianflutur/webviewx "adrianflutur") for webviewx package<br>
-[Mahad61](https://github.com/Mahad61/webviewx_plus "Mahad61") for webviewx_plus package<br>
-[miguelpruivo](https://github.com/miguelpruivo/flutter_file_picker "file_picker") for filepicker pacakge<br>
-[marcelogil](https://github.com/marcelogil/el_tooltip "marcelogil") for eltooltip package, which we used in this package to create custom color picker<br>
+-  More examples for each available apis
 
 ------------
 
 ### MIT License
 
-Copyright (c) 2022 Pavan Kumar
+Copyright (c) 2022 Pavan Kumar Nagulavancha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

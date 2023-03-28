@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   ];
 
   final _toolbarColor = Colors.greenAccent.shade100;
-  final _backgroundColor = Colors.white70;
+  final _backgroundColor = Colors.transparent;
   final _toolbarIconColor = Colors.black87;
   final _editorTextStyle = const TextStyle(fontSize: 18, color: Colors.black54, fontWeight: FontWeight.normal);
   final _hintTextStyle = const TextStyle(fontSize: 18, color: Colors.teal, fontWeight: FontWeight.normal);
@@ -62,24 +62,24 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Container(
-              constraints: BoxConstraints(maxHeight: 200),
+              constraints: BoxConstraints(maxHeight: 222),
               color: Colors.redAccent,
               child: QuillHtmlEditor(
                 text: "<h1>Hello</h1>This is a quill html editor example 😊",
                 hintText: 'Hint text goes here',
                 controller: controller,
                 isEnabled: true,
-                height: 222,
                 textStyle: _editorTextStyle,
                 hintTextStyle: _hintTextStyle,
                 hintTextAlign: TextAlign.start,
                 padding: const EdgeInsets.only(left: 10, top: 5),
                 hintTextPadding: EdgeInsets.zero,
-                backgroundColor: _backgroundColor,
+                backgroundColor: Colors.green,
                 onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
                 onTextChanged: (text) => debugPrint('widget text change $text'),
                 onEditorCreated: () => debugPrint('Editor has been loaded'),
                 onSelectionChanged: (sel) => debugPrint('index ${sel.index}, range ${sel.length}'),
+                minHeight: 111,
               ),
             ),
           ],
